@@ -1,11 +1,29 @@
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
 #include <iostream>
+#include <cmath>
 
 constexpr int SCREEN_WIDTH = 900;
 constexpr int SCREEN_HEIGHT = 600;
 
+constexpr int START_RADIUS = 20;
 constexpr int TARGET_FPS = 60;
+
+void draw_circle(SDL_Surface* surface, int x_center, int y_center, int radius, Uint32 color) 
+{
+    SDL_Rect pixel = {0, 0, 1, 1};
+    for (int x = x_center-radius; x < x_center + radius; ++x) {
+        for (int y = y_center-radius; y < y_center + radius; ++y) {
+            /* is the pixel part of the cirlce?? */
+            int distance_from_center = std::sqrt(std::pow( x - x_center, 2) + std::pow(y - y_center, 2)); 
+            if (distance_from_center < radius) {
+                pixel.x = x;
+                pixel.y = y;
+                SDL_FillRect(surface, &pixel, 0x00FF0000);
+            }
+        }
+    }
+}
 
 int main() {
     SDL_Init(SDL_INIT_VIDEO);
@@ -19,6 +37,7 @@ int main() {
 
     int x;
     int y;
+    int radius = START_RADIUS;
 
     float delay_ms = (1.0f / TARGET_FPS) * 1000;
     while (running) {
@@ -36,7 +55,8 @@ int main() {
         }
 
         if (drawing) {
-            SDL_Rect rect = {x, y, 50, 50};
+            draw_circle(surface, x, y, radius, 0x00FF0000);
+            SDL_Rect rect = {x, y, 20, 20};
             SDL_FillRect(surface, &rect, 0x00FF0000);
             SDL_UpdateWindowSurface(window);
         }
