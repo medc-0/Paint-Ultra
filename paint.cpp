@@ -1,7 +1,6 @@
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
 #include <iostream>
-#include <array>
 #include <cmath>
 
 #define START_RADIUS 20
