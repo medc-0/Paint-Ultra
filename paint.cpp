@@ -12,9 +12,6 @@ int main() {
     SDL_Window* window = SDL_CreateWindow("Mega Paint", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
 
     SDL_Surface* surface = SDL_GetWindowSurface(window);
-    SDL_Rect rect = {SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2 - 100, 200, 200};
-    SDL_FillRect(surface, &rect, 0x00FF0000);
-    SDL_UpdateWindowSurface(window);
 
     bool running = true;
     SDL_Event event;
@@ -26,6 +23,9 @@ int main() {
                 running = false;
             }
         }
+        SDL_Rect rect = {SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2 - 100, 200, 200};
+        SDL_FillRect(surface, &rect, 0x00FF0000);
+        SDL_UpdateWindowSurface(window);
         SDL_Delay(delay_ms);
     }
 
