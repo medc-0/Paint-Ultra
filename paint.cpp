@@ -106,6 +106,7 @@ int main() {
                     brush_size += event.wheel.preciseY;
                     if (brush_size < 1)
                         brush_size = 1;
+                    std::cout << "Brush size: " << brush_size << '\n';
                     break;
             }
         }
