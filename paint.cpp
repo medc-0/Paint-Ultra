@@ -14,18 +14,28 @@ int main() {
     SDL_Surface* surface = SDL_GetWindowSurface(window);
 
     bool running = true;
+    bool drawing = false;
     SDL_Event event;
 
     float delay_ms = (1.0f / TARGET_FPS) * 1000;
     while (running) {
         while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                running = false;
+            switch(event.type) {
+                case SDL_QUIT:
+                    running = false;
+                    break;
+                case SDL_MOUSEMOTION:
+                    drawing = true;
+                    break;
             }
         }
-        SDL_Rect rect = {SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2 - 100, 200, 200};
-        SDL_FillRect(surface, &rect, 0x00FF0000);
-        SDL_UpdateWindowSurface(window);
+
+        if (drawing) {
+            SDL_Rect rect = {SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2 - 100, 200, 200};
+            SDL_FillRect(surface, &rect, 0x00FF0000);
+            SDL_UpdateWindowSurface(window);
+        }
+
         SDL_Delay(delay_ms);
     }
 
