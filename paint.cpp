@@ -46,10 +46,17 @@ int main() {
                 case SDL_QUIT:
                     running = false;
                     break;
+                case SDL_MOUSEMOTION:
+                    x = event.motion.x;
+                    y = event.motion.y;
+                    break;
                 case SDL_MOUSEBUTTONDOWN:
                     drawing = true;
                     x = event.motion.x;
                     y = event.motion.y;
+                    break;
+                case SDL_MOUSEBUTTONUP: 
+                    drawing = false;
                     break;
             }
         }
