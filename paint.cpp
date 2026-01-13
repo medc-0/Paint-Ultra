@@ -17,6 +17,9 @@ int main() {
     bool drawing = false;
     SDL_Event event;
 
+    int x;
+    int y;
+
     float delay_ms = (1.0f / TARGET_FPS) * 1000;
     while (running) {
         while (SDL_PollEvent(&event)) {
@@ -26,12 +29,14 @@ int main() {
                     break;
                 case SDL_MOUSEMOTION:
                     drawing = true;
+                    x = event.motion.x;
+                    y = event.motion.y;
                     break;
             }
         }
 
         if (drawing) {
-            SDL_Rect rect = {SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2 - 100, 200, 200};
+            SDL_Rect rect = {x, y, 50, 50};
             SDL_FillRect(surface, &rect, 0x00FF0000);
             SDL_UpdateWindowSurface(window);
         }
