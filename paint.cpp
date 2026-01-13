@@ -5,7 +5,7 @@
 
 #define START_RADIUS 20
 #define TARGET_FPS 60
-#define COLOR_RECT_SIZE 10
+#define COLOR_RECT_SIZE 20
 
 constexpr int SCREEN_WIDTH = 900;
 constexpr int SCREEN_HEIGHT = 600;
@@ -30,7 +30,7 @@ void draw_circle(SDL_Surface* surface, int x_center, int y_center, int radius, U
     SDL_Rect pixel = {0, 0, 1, 1};
     for (int x = x_center-radius; x < x_center + radius; ++x) {
         for (int y = y_center-radius; y < y_center + radius; ++y) {
-            /* is the pixel part of the cirlce?? */
+            /* is the pixel part of the cirlce */
             int distance_from_center = std::sqrt(std::pow(x - x_center, 2) + std::pow(y - y_center, 2)); 
             if (distance_from_center < radius) {
                 pixel.x = x;
@@ -57,6 +57,7 @@ int main() {
     Uint32 color_palette[] = {0x000000, 0xFFFFFF, 0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0x00FFFF, 0xFF00FF};
 
     float delay_ms = (1.0f / TARGET_FPS) * 1000;
+
     while (running) {
         while (SDL_PollEvent(&event)) {
             switch(event.type) {
@@ -80,9 +81,10 @@ int main() {
 
         if (drawing) {
             draw_circle(surface, x, y, radius, 0x00FF0000);
-            draw_palette(surface, color_palette, sizeof(color_palette));
             SDL_UpdateWindowSurface(window);
         }
+        draw_palette(surface, color_palette, 8);
+        SDL_UpdateWindowSurface(window);
 
         SDL_Delay(delay_ms);
     }
