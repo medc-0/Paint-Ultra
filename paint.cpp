@@ -56,8 +56,6 @@ int main() {
 
         if (drawing) {
             draw_circle(surface, x, y, radius, 0x00FF0000);
-            SDL_Rect rect = {x, y, 20, 20};
-            SDL_FillRect(surface, &rect, 0x00FF0000);
             SDL_UpdateWindowSurface(window);
         }
 
