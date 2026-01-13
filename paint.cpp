@@ -76,7 +76,7 @@ int main() {
 
     int x;
     int y;
-    int radius = START_RADIUS;
+    int brush_size = START_RADIUS;
 
     float delay_ms = (1.0f / TARGET_FPS) * 1000;
     while (running) {
@@ -102,11 +102,16 @@ int main() {
                 case SDL_MOUSEBUTTONUP: 
                     drawing = false;
                     break;
+                case SDL_MOUSEWHEEL:
+                    brush_size += event.wheel.preciseY;
+                    if (brush_size < 1)
+                        brush_size = 1;
+                    break;
             }
         }
 
         if (drawing) {
-            draw_circle(surface, x, y, radius, color);
+            draw_circle(surface, x, y, brush_size, color);
             SDL_UpdateWindowSurface(window);
             SDL_Delay(delay_ms);
         }
