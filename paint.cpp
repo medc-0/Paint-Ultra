@@ -90,10 +90,14 @@ int main() {
                     y = event.motion.y;
                     break;
                 case SDL_MOUSEBUTTONDOWN:
-                    drawing = true;
-                    x = event.motion.x;
-                    y = event.motion.y;
-                    check_color_palette_choosen(x, y);
+                    if (inside_color_palette(x, y)) {
+                        check_color_palette_choosen(x, y);
+                    }
+                    else {
+                        drawing = true;
+                        x = event.motion.x;
+                        y = event.motion.y;
+                    }
                     break;
                 case SDL_MOUSEBUTTONUP: 
                     drawing = false;
