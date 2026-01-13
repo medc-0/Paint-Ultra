@@ -113,10 +113,11 @@ int main() {
         if (drawing) {
             draw_circle(surface, x, y, brush_size, color);
             SDL_UpdateWindowSurface(window);
-            SDL_Delay(delay_ms);
         }
         draw_palette(surface, color_palette, COLOR_PALETTE_SIZE);
         SDL_UpdateWindowSurface(window);
+        
+        SDL_Delay(delay_ms);
     }
 
     SDL_DestroyWindow(window);
