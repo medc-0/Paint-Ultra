@@ -3,12 +3,35 @@
 #include <iostream>
 #include <cmath>
 
-#define START_RADIUS 20
-#define TARGET_FPS 60
 #define COLOR_RECT_SIZE 20
+#define START_COLOR 0xFF0000
 
 constexpr int SCREEN_WIDTH = 900;
 constexpr int SCREEN_HEIGHT = 600;
+constexpr int START_RADIUS = 20;
+constexpr int TARGET_FPS = 60;
+constexpr int COLOR_PALETTE_SIZE = 8;
+
+Uint32 color = START_COLOR;
+Uint32 color_palette[] = {0x000000, 0xFFFFFF, 0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0x00FFFF, 0xFF00FF};
+
+bool inside_color_palette(int x, int y) 
+{
+    return x <= COLOR_PALETTE_SIZE*COLOR_RECT_SIZE && y <= COLOR_RECT_SIZE;
+}
+
+/*
+    Check if user clicked color palette and updates color if so
+*/
+void check_color_palette_choosen(int x, int y) 
+{   
+    int i;
+    if (inside_color_palette(x, y)) {
+        /* Mouse is inside x,y range of color palette */
+        i = x / COLOR_RECT_SIZE;
+        color = color_palette[i];
+    }
+}
 
 /* 
     Draw Mini Color Palette to choose from
@@ -35,7 +58,7 @@ void draw_circle(SDL_Surface* surface, int x_center, int y_center, int radius, U
             if (distance_from_center < radius) {
                 pixel.x = x;
                 pixel.y = y;
-                SDL_FillRect(surface, &pixel, 0x00FF0000);
+                SDL_FillRect(surface, &pixel, color);
             }
         }
     }
@@ -43,7 +66,7 @@ void draw_circle(SDL_Surface* surface, int x_center, int y_center, int radius, U
 
 int main() {
     SDL_Init(SDL_INIT_VIDEO);
-    SDL_Window* window = SDL_CreateWindow("Mega Paint", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
+    SDL_Window* window = SDL_CreateWindow("Ultra Pain(t)", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
 
     SDL_Surface* surface = SDL_GetWindowSurface(window);
 
@@ -54,10 +77,8 @@ int main() {
     int x;
     int y;
     int radius = START_RADIUS;
-    Uint32 color_palette[] = {0x000000, 0xFFFFFF, 0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0x00FFFF, 0xFF00FF};
 
     float delay_ms = (1.0f / TARGET_FPS) * 1000;
-
     while (running) {
         while (SDL_PollEvent(&event)) {
             switch(event.type) {
@@ -72,6 +93,7 @@ int main() {
                     drawing = true;
                     x = event.motion.x;
                     y = event.motion.y;
+                    check_color_palette_choosen(x, y);
                     break;
                 case SDL_MOUSEBUTTONUP: 
                     drawing = false;
@@ -80,13 +102,12 @@ int main() {
         }
 
         if (drawing) {
-            draw_circle(surface, x, y, radius, 0x00FF0000);
+            draw_circle(surface, x, y, radius, color);
             SDL_UpdateWindowSurface(window);
+            SDL_Delay(delay_ms);
         }
-        draw_palette(surface, color_palette, 8);
+        draw_palette(surface, color_palette, COLOR_PALETTE_SIZE);
         SDL_UpdateWindowSurface(window);
-
-        SDL_Delay(delay_ms);
     }
 
     SDL_DestroyWindow(window);
