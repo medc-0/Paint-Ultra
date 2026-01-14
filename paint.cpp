@@ -53,6 +53,7 @@ void draw_palette(SDL_Surface* surface)
 void draw_circle(SDL_Surface* surface, int cx, int cy, int radius, Uint32 col)
 {
     int r2 = radius * radius;
+    SDL_Rect pixel = {0, 0, 1, 1};
 
     for (int x = cx - radius; x <= cx + radius; ++x) {
         for (int y = cy - radius; y <= cy + radius; ++y) {
@@ -63,17 +64,15 @@ void draw_circle(SDL_Surface* surface, int cx, int cy, int radius, Uint32 col)
             int dx = x - cx;
             int dy = y - cy;
 
-            if (dx*dx + dy*dy <= r2) {
-                Uint32* pixel =
-                    (Uint32*)((Uint8*)surface->pixels +
-                    y * surface->pitch +
-                    x * surface->format->BytesPerPixel);
-
-                *pixel = col;
+            if (dx * dx + dy * dy <= r2) {
+                pixel.x = x;
+                pixel.y = y;
+                SDL_FillRect(surface, &pixel, col);
             }
         }
     }
 }
+
 
 int main()
 {
