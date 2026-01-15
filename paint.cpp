@@ -1,25 +1,14 @@
 #define SDL_MAIN_HANDLED
-#include <SDL2/SDL.h>
-#include <iostream>
+#include "paint.h"
 
-#define COLOR_RECT_SIZE 20
 #define START_COLOR 0xFF0000
 
-constexpr int SCREEN_WIDTH = 900;
-constexpr int SCREEN_HEIGHT = 600;
-constexpr int START_RADIUS = 20;
-constexpr int TARGET_FPS = 60;
-constexpr int COLOR_PALETTE_SIZE = 8;
-
-constexpr int PALETTE_HEIGHT = COLOR_RECT_SIZE;
-
-Uint32 color = START_COLOR;
-Uint32 color_palette[COLOR_PALETTE_SIZE] = {0x000000, 0xFFFFFF, 0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0x00FFFF, 0xFF00FF};
-
+PaintApp::PaintApp() : color(START_COLOR) {}
+PaintApp::~PaintApp() {}
 /*
     Returns true if (x, y) is inside the color palette area.
 */
-bool inside_color_palette(int x, int y)
+bool PaintApp::inside_color_palette(int x, int y)
 {
     return x >= 0 && x < COLOR_PALETTE_SIZE * COLOR_RECT_SIZE && y >= 0 && y < PALETTE_HEIGHT;
 }
@@ -28,7 +17,7 @@ bool inside_color_palette(int x, int y)
     Updates the current color based on mouse position.
     Assumes the mouse is already inside the palette.
 */
-void pick_color(int x)
+void PaintApp::pick_color(int x)
 {
     int index = x / COLOR_RECT_SIZE;
     color = color_palette[index];
@@ -37,7 +26,7 @@ void pick_color(int x)
 /*
     Draws the color palette UI at the top of the window.
 */
-void draw_palette(SDL_Surface* surface)
+void PaintApp::draw_palette(SDL_Surface* surface)
 {
     SDL_Rect rect;
 
@@ -50,7 +39,7 @@ void draw_palette(SDL_Surface* surface)
 /*
     Draws a filled circle using squared distance checks
 */
-void draw_circle(SDL_Surface* surface, int cx, int cy, int radius, Uint32 col)
+void PaintApp::draw_circle(SDL_Surface* surface, int cx, int cy, int radius, Uint32 col)
 {
     int r2 = radius * radius;
     SDL_Rect pixel = {0, 0, 1, 1};
@@ -73,17 +62,15 @@ void draw_circle(SDL_Surface* surface, int cx, int cy, int radius, Uint32 col)
     }
 }
 
-
-int main()
-{
+void PaintApp::run() {
     SDL_Init(SDL_INIT_VIDEO);
 
     SDL_Window* window = SDL_CreateWindow(
         "Ultra Pain(t)",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        SCREEN_WIDTH,
-        SCREEN_HEIGHT,
+        800,
+        600,
         0
     );
 
@@ -155,8 +142,15 @@ int main()
 
         SDL_Delay(frame_delay);
     }
-
+    
     SDL_DestroyWindow(window);
     SDL_Quit();
-    return 0;
+}
+
+
+int main()
+{
+    PaintApp app;
+    app.run();
+    return EXIT_SUCCESS;
 }
