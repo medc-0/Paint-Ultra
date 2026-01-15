@@ -35,19 +35,31 @@ void PaintApp::pick_color(int x)
 /*
     Clear the screen with a default chosen color when the key C is pressed
 */
-void PaintApp::clear_screen(SDL_Surface* surface, Uint32 fillcolor) 
+void PaintApp::clear_canvas(Uint32 resetcolor) 
 {
-    // std::cout << "C key is pressed make surface based of the color: " << fillcolor << std::endl;
-    SDL_Rect fillpixel = {0,0,WIDTH,HEIGHT};
-    SDL_FillRect(surface, &fillpixel ,fillcolor);
-    draw_palette(surface);
+    // std::cout << "key:C\n";
+    SDL_Rect fillpixel = {0, 0, WIDTH, HEIGHT};
+    SDL_FillRect(surface, &fillpixel, resetcolor);
+    draw_palette();
+    SDL_UpdateWindowSurface(window);
+}
+
+/*  
+    Fill the canvas whole canvas with the current selected color
+*/
+void PaintApp::fill_canvas()
+{
+    // std::cout << "key:F\n";
+    SDL_Rect fpixel = {0, 20, WIDTH, HEIGHT - PALETTE_HEIGHT};
+    SDL_FillRect(surface, &fpixel, color);
+    draw_palette();
     SDL_UpdateWindowSurface(window);
 }
 
 /*
     Draws the color palette UI at the top of the window.
 */
-void PaintApp::draw_palette(SDL_Surface* surface)
+void PaintApp::draw_palette()
 {
     SDL_Rect rect;
 
@@ -60,7 +72,7 @@ void PaintApp::draw_palette(SDL_Surface* surface)
 /*
     Draws a filled circle using squared distance checks
 */
-void PaintApp::draw_circle(SDL_Surface* surface, int cx, int cy, int radius, Uint32 col)
+void PaintApp::draw_circle(int cx, int cy, int radius, Uint32 col)
 {
     int r2 = radius * radius;
     SDL_Rect pixel = {0, 0, 1, 1};
@@ -96,14 +108,10 @@ void PaintApp::run() {
     int brush_size = START_RADIUS;
 
     Uint32 frame_delay = 1000 / TARGET_FPS;
-    draw_palette(surface);
+    draw_palette();
     SDL_UpdateWindowSurface(window);
 
     while (running) {
-        /*
-        --> f key and then pick color for filling screen with a chosen color (WORK)
-        */
-
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
 
@@ -135,8 +143,8 @@ void PaintApp::run() {
 
                 case SDL_KEYDOWN:
                     if (event.key.keysym.sym == SDLK_ESCAPE) running = false;
-                    if (event.key.keysym.sym == SDLK_c) clear_screen(surface, 0x00000000);
-                    // if (event.key.keysym.sym == SDLK_f)
+                    if (event.key.keysym.sym == SDLK_c) clear_canvas(0x00000000);
+                    if (event.key.keysym.sym == SDLK_f) fill_canvas();
                     break;
 
                 case SDL_MOUSEWHEEL:
@@ -148,12 +156,12 @@ void PaintApp::run() {
         }
 
         if (drawing && mouse_y >= PALETTE_HEIGHT) {
-            draw_circle(surface, mouse_x, mouse_y, brush_size, color);
+            draw_circle(mouse_x, mouse_y, brush_size, color);
             needs_redraw = true;
         }
 
         if (needs_redraw) {
-            draw_palette(surface);
+            draw_palette();
             SDL_UpdateWindowSurface(window);
             needs_redraw = false;
         }
