@@ -15,6 +15,7 @@ class PaintApp {
         void pick_color(int x);
         void draw_palette(SDL_Surface* surface);
         void draw_circle(SDL_Surface* surface, int cx, int cy, int radius, Uint32 col);
+        void clear_screen(SDL_Surface* surface, Uint32 fillcolor);
         static const int COLOR_PALETTE_SIZE = 8;
         static const int COLOR_RECT_SIZE = 20;
         static const int PALETTE_HEIGHT = COLOR_RECT_SIZE;

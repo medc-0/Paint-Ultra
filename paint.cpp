@@ -24,6 +24,14 @@ void PaintApp::pick_color(int x)
 }
 
 /*
+    Clear the screen with a default chosen color when the key C is pressed
+*/
+void PaintApp::clear_screen(SDL_Surface* surface, Uint32 fillcolor) 
+{
+    // std::cout << "C key is pressed make surface based of the color: " << fillcolor << std::endl;
+}
+
+/*
     Draws the color palette UI at the top of the window.
 */
 void PaintApp::draw_palette(SDL_Surface* surface)
@@ -92,6 +100,13 @@ void PaintApp::run() {
 
     while (running) {
 
+        // prototyping.
+        /*
+        --> clear screen function "key C"
+        --> ESC to leave the application
+        --> f key and then pick color for filling screen with a chosen color
+        */
+
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
 
@@ -119,6 +134,12 @@ void PaintApp::run() {
 
                 case SDL_MOUSEBUTTONUP:
                     drawing = false;
+                    break;
+
+                case SDL_KEYDOWN:
+                    if (event.key.keysym.sym == SDLK_ESCAPE) running = false;
+                    if (event.key.keysym.sym == SDLK_c) clear_screen(surface, 0x00000000);
+                    // if (event.key.keysym.sym == SDLK_f)
                     break;
 
                 case SDL_MOUSEWHEEL:
