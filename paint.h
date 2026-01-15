@@ -11,6 +11,8 @@ class PaintApp {
         void run();
 
         private:
+        SDL_Window* window;
+        SDL_Surface* surface;
         bool inside_color_palette(int x, int y);
         void pick_color(int x);
         void draw_palette(SDL_Surface* surface);

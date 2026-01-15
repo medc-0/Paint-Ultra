@@ -3,7 +3,16 @@
 
 #define START_COLOR 0xFF0000
 
-PaintApp::PaintApp() : color(START_COLOR) {}
+static const int WIDTH = 900;
+static const int HEIGHT = 600;
+
+PaintApp::PaintApp()
+    : color(START_COLOR), window(window), surface(surface) {
+    SDL_Init(SDL_INIT_VIDEO);
+    window = SDL_CreateWindow("Ultra Pain(t)", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, 0);
+    surface = SDL_GetWindowSurface(window);
+}
+
 PaintApp::~PaintApp() {}
 /*
     Returns true if (x, y) is inside the color palette area.
@@ -29,6 +38,10 @@ void PaintApp::pick_color(int x)
 void PaintApp::clear_screen(SDL_Surface* surface, Uint32 fillcolor) 
 {
     // std::cout << "C key is pressed make surface based of the color: " << fillcolor << std::endl;
+    SDL_Rect fillpixel = {0,0,WIDTH,HEIGHT};
+    SDL_FillRect(surface, &fillpixel ,fillcolor);
+    draw_palette(surface);
+    SDL_UpdateWindowSurface(window);
 }
 
 /*
@@ -71,18 +84,6 @@ void PaintApp::draw_circle(SDL_Surface* surface, int cx, int cy, int radius, Uin
 }
 
 void PaintApp::run() {
-    SDL_Init(SDL_INIT_VIDEO);
-
-    SDL_Window* window = SDL_CreateWindow(
-        "Ultra Pain(t)",
-        SDL_WINDOWPOS_CENTERED,
-        SDL_WINDOWPOS_CENTERED,
-        800,
-        600,
-        0
-    );
-
-    SDL_Surface* surface = SDL_GetWindowSurface(window);
 
     bool running = true;
     bool drawing = false;
@@ -99,12 +100,8 @@ void PaintApp::run() {
     SDL_UpdateWindowSurface(window);
 
     while (running) {
-
-        // prototyping.
         /*
-        --> clear screen function "key C"
-        --> ESC to leave the application
-        --> f key and then pick color for filling screen with a chosen color
+        --> f key and then pick color for filling screen with a chosen color (WORK)
         */
 
         while (SDL_PollEvent(&event)) {
