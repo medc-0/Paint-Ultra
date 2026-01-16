@@ -7,13 +7,16 @@ static const int WIDTH = 900;
 static const int HEIGHT = 600;
 
 PaintApp::PaintApp()
-    : color(START_COLOR), window(window), surface(surface) {
+    : color(START_COLOR), window(nullptr), surface(nullptr) {
     SDL_Init(SDL_INIT_VIDEO);
     window = SDL_CreateWindow("Ultra Pain(t)", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, 0);
     surface = SDL_GetWindowSurface(window);
 }
 
-PaintApp::~PaintApp() {}
+PaintApp::~PaintApp() {
+    if (window) SDL_DestroyWindow(window);
+    SDL_Quit();
+}
 /*
     Returns true if (x, y) is inside the color palette area.
 */
@@ -38,9 +41,9 @@ void PaintApp::pick_color(int x)
 void PaintApp::clear_canvas(Uint32 resetcolor) 
 {
     // std::cout << "key:C\n";
-    SDL_Rect fillpixel = {0, 0, WIDTH, HEIGHT};
+    SDL_Rect fillpixel = {0, PALETTE_HEIGHT, WIDTH, HEIGHT - PALETTE_HEIGHT};
     SDL_FillRect(surface, &fillpixel, resetcolor);
-    draw_palette();
+    // draw_palette();
     SDL_UpdateWindowSurface(window);
 }
 
@@ -168,9 +171,6 @@ void PaintApp::run() {
 
         SDL_Delay(frame_delay);
     }
-    
-    SDL_DestroyWindow(window);
-    SDL_Quit();
 }
 
 
