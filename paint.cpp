@@ -7,7 +7,7 @@ static const int WIDTH = 900;
 static const int HEIGHT = 600;
 
 PaintApp::PaintApp()
-    : color(START_COLOR), window(nullptr), surface(nullptr) {
+    : window(nullptr), surface(nullptr), color(START_COLOR) {
     SDL_Init(SDL_INIT_VIDEO);
     window = SDL_CreateWindow("Ultra Pain(t)", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, 0);
     surface = SDL_GetWindowSurface(window);
@@ -180,3 +180,15 @@ int main()
     app.run();
     return EXIT_SUCCESS;
 }
+
+
+
+
+// Coding today:
+/*
+    - Get rid of warnings
+    - Expandable canvas size
+    - Save / Open feature (maybe too advanced)
+    - Better UI and Compatibility
+    - More colors?
+*/
