@@ -152,6 +152,8 @@ void PaintApp::run()
             case SDL_KEYDOWN:
                 if (event.key.keysym.sym == SDLK_ESCAPE) running = false;
                 if (event.key.keysym.sym == SDLK_c) clear_canvas(0xFFFFFFFF);
+                if (event.key.keysym.sym == SDLK_f) fill_canvas();
+                if (event.key.keysym.sym == SDLK_p) IMG_SavePNG(canvas, "saved.png");
 
                 if (event.key.keysym.sym == SDLK_a) cam_x -= 40;
                 if (event.key.keysym.sym == SDLK_d) cam_x += 40;
